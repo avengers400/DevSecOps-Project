@@ -1,8 +1,12 @@
-<img width="1536" height="1024" alt="Netflix Clone Interface with Movie Posters" src="https://github.com/user-attachments/assets/028adf0b-029b-4af9-884a-fa5aa29fe4a4" />
+<img width="1892" height="948" alt="jenkins_dashboard" src="https://github.com/user-attachments/assets/63a163ef-e25f-4852-96c3-437ee795a578" /><img width="1536" height="1024" alt="Netflix Clone Interface with Movie Posters" src="https://github.com/user-attachments/assets/028adf0b-029b-4af9-884a-fa5aa29fe4a4" />
 
 <img width="1275" height="481" alt="Pipeline-steps" src="https://github.com/user-attachments/assets/6cd20316-21e6-4948-adec-c827497f6929" />
 
-![Uploading jenkins_dashboard.png…]()
+
+<img width="1892" height="948" alt="jenkins_dashboard" src="https://github.com/user-attachments/assets/d3f9ba9c-9ac2-4ac3-83bf-f2698dfd020a" />
+
+
+
 
 
 
@@ -281,7 +285,7 @@ pipeline{
         }
         stage('Checkout from Git'){
             steps{
-                git branch: 'main', url: 'https://github.com/N4si/DevSecOps-Project.git'
+                git branch: 'main', url: 'https://github.com/avengers400/DevSecOps-Project.git'
             }
         }
         stage("Sonarqube Analysis "){
@@ -320,8 +324,8 @@ pipeline{
                 script{
                    withDockerRegistry(credentialsId: 'docker', toolName: 'docker'){   
                        sh "docker build --build-arg TMDB_V3_API_KEY=<yourapikey> -t netflix ."
-                       sh "docker tag netflix nasi101/netflix:latest "
-                       sh "docker push nasi101/netflix:latest "
+                       sh "docker tag netflix rishav23/netflix:latest "
+                       sh "docker push rishav23/netflix:latest "
                     }
                 }
             }
@@ -333,11 +337,23 @@ pipeline{
         }
         stage('Deploy to container'){
             steps{
-                sh 'docker run -d --name netflix -p 8081:80 nasi101/netflix:latest'
+                sh 'docker run -d --name netflix -p 8081:80 rishav23/netflix:latest'
             }
         }
     }
+    post {
+    always {
+        emailext attachLog: true,
+            subject: "${currentBuild.result}",
+            body: "Project: ${env.JOB_NAME}<br/>" +
+                  "Build Number: ${env.BUILD_NUMBER}<br/>" +
+                  "URL: ${env.BUILD_URL}<br/>",
+            to: 'rishav05731@gmail.com', // change mail here
+            attachmentsPattern: 'trivyfs.txt,trivyImage.txt'
+    }
 }
+}
+    
 
 
 If you get docker login failed errorr
